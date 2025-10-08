@@ -67,7 +67,6 @@ class Coffre
     public function removeMontre(Montre $montre): static
     {
         if ($this->montres->removeElement($montre)) {
-            // set the owning side to null (unless already changed)
             if ($montre->getCoffre() === $this) {
                 $montre->setCoffre(null);
             }

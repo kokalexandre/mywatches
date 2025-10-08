@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des montres{% endblock %}
+
+{% block body %}
+  <h1>Liste des montres</h1>
+
+  {% if montres is empty %}
+    <p>Aucune montre en base.</p>
+  {% else %}
+    <ul>
+      {% for m in montres %}
+        <li>
+          <a href="{{ path('montre_show', {id: m.id}) }}">
+            Montre #{{ m.id }} — {{ m.marque }} {{ m.reference }}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  <p><a href="{{ path('coffre_list') }}">← Back coffres</a></p>
+{% endblock %}

@@ -1,0 +1,22 @@
+{# templates/coffre/list.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des coffres{% endblock %}
+
+{% block body %}
+  <h1>Liste des coffres (tous les membres)</h1>
+
+  {% if coffres is empty %}
+    <p>Aucun coffre en base.</p>
+  {% else %}
+    <ul>
+      {% for coffre in coffres %}
+        <li>
+          <a href="{{ path('coffre_show', {id: coffre.id}) }}">
+            Coffre #{{ coffre.id }}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endblock %}

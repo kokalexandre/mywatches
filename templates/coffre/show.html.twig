@@ -1,0 +1,43 @@
+{# templates/coffre/show.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Coffre n°{{ coffre.id }}{% endblock %}
+
+{% block body %}
+  <h1>Coffre</h1>
+
+  {# Pour vérifier le nom exact de la collection (ex: montres), décommente :
+  {% dump(coffre) %}
+  #}
+
+  <table class="table" border="1" cellpadding="6">
+    <tbody>
+      <tr>
+        <th>Id</th>
+        <td>{{ coffre.id }}</td>
+      </tr>
+      <tr>
+        <th>Description</th>
+        <td>{{ coffre.description }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Montres de ce coffre</h2>
+
+  {% if coffre.montres is empty %}
+    <p>Aucune montre dans ce coffre.</p>
+  {% else %}
+    <ul>
+      {% for m in coffre.montres %}
+        <li>
+          <a href="{{ path('montre_show', { id: m.id }) }}">
+            #{{ m.id }} — {{ m.marque }} {{ m.reference }}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  <p><a href="{{ path('coffre_list') }}">← Back to list</a></p>
+{% endblock %}
