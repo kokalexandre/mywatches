@@ -1,0 +1,96 @@
+<?php
+
+namespace App\Entity;
+
+use App\Repository\MontreRepository;
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Entity(repositoryClass: MontreRepository::class)]
+class Montre
+{
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $description = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $marque = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $reference = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $annee = null;
+
+    #[ORM\ManyToOne(inversedBy: 'montres')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Coffre $coffre = null;
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): static
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getMarque(): ?string
+    {
+        return $this->marque;
+    }
+
+    public function setMarque(string $marque): static
+    {
+        $this->marque = $marque;
+
+        return $this;
+    }
+
+    public function getReference(): ?string
+    {
+        return $this->reference;
+    }
+
+    public function setReference(string $reference): static
+    {
+        $this->reference = $reference;
+
+        return $this;
+    }
+
+    public function getAnnee(): ?int
+    {
+        return $this->annee;
+    }
+
+    public function setAnnee(?int $annee): static
+    {
+        $this->annee = $annee;
+
+        return $this;
+    }
+
+    public function getCoffre(): ?Coffre
+    {
+        return $this->coffre;
+    }
+
+    public function setCoffre(?Coffre $coffre): static
+    {
+        $this->coffre = $coffre;
+
+        return $this;
+    }
+}
