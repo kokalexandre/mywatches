@@ -18,11 +18,9 @@ class MontreController extends AbstractController
         $montre = $montreRepository->find($id);
 
         if (!$montre) {
-            // 404 propre si l'id n'existe pas
             throw $this->createNotFoundException('Cette montre n’existe pas.');
         }
 
-        // Rendu Twig
         return $this->render('montre/show.html.twig', [
             'montre' => $montre,
         ]);
