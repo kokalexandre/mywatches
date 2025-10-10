@@ -1,6 +1,6 @@
-# ============================================================
-#	MyWatches — Gestion de collections de montres
-# ============================================================
+# ===============================================
+# MyWatches — Gestion de collections de montres
+# ===============================================
 
 ## 1) Explication du site
 MyWatches est un site pour gérer une collection personnelle de montres et publier une partie via des vitrines (ultérieur). L’objectif est pédagogique : appliquer Symfony + Doctrine + Twig, sans sur-ingénierie ni héritage d’entités.
