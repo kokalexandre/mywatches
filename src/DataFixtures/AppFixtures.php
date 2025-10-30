@@ -6,9 +6,19 @@ use App\Entity\Coffre;
 use App\Entity\Montre;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use App\Entity\Member;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
+
+    private UserPasswordHasherInterface $hasher;
+
+    public function __construct(UserPasswordHasherInterface $hasher)
+    {
+        $this->hasher = $hasher;
+    }
+
     /**
      * Génère des données d'initialisation pour les coffres : [description]
      * @return \Generator<array{0:string}>
@@ -52,8 +62,34 @@ class AppFixtures extends Fixture
         yield ["Plongeuse vintage",      "Seiko",               "62MAS 6217-8001",   1967, "Coffre #3 - vintage"];
     }
 
+
+    /**
+     * Generates initialization data for members :
+     *  [email, plain text password]
+     * @return \\Generator
+     */
+    private function membersGenerator()
+    {
+        yield ['olivier@localhost','123456'];
+        yield ['slash@localhost','123456'];
+    }
+
     public function load(ObjectManager $manager): void
     {
+
+        foreach ($this->membersGenerator() as [$email, $plainPassword]) {
+            $user = new Member();
+            $password = $this->hasher->hashPassword($user, $plainPassword);
+            $user->setEmail($email);
+            $user->setPassword($password);
+
+            // $roles = array();
+            // $roles[] = $role;
+            // $user->setRoles($roles);
+
+            $manager->persist($user);
+        }
+        $manager->flush();
 
         foreach (self::coffresDataGenerator() as [$description]) {
             $coffre = (new Coffre())->setDescription($description);
@@ -83,4 +119,5 @@ class AppFixtures extends Fixture
 
         $manager->flush();
     }
+
 }

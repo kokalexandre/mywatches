@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\MontreRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: MontreRepository::class)]
@@ -28,6 +30,17 @@ class Montre
     #[ORM\ManyToOne(inversedBy: 'montres')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Coffre $coffre = null;
+
+    /**
+     * @var Collection<int, Vitrine>
+     */
+    #[ORM\ManyToMany(targetEntity: Vitrine::class, mappedBy: 'montres')]
+    private Collection $vitrines;
+
+    public function __construct()
+    {
+        $this->vitrines = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -90,6 +103,33 @@ class Montre
     public function setCoffre(?Coffre $coffre): static
     {
         $this->coffre = $coffre;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Vitrine>
+     */
+    public function getVitrines(): Collection
+    {
+        return $this->vitrines;
+    }
+
+    public function addVitrine(Vitrine $vitrine): static
+    {
+        if (!$this->vitrines->contains($vitrine)) {
+            $this->vitrines->add($vitrine);
+            $vitrine->addMontre($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVitrine(Vitrine $vitrine): static
+    {
+        if ($this->vitrines->removeElement($vitrine)) {
+            $vitrine->removeMontre($this);
+        }
 
         return $this;
     }

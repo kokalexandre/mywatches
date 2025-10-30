@@ -1,5 +1,6 @@
 # ===============================================
 # MyWatches — Gestion de collections de montres
+# Auteur : Alexandre KOK
 # ===============================================
 
 ## 1) Explication du site

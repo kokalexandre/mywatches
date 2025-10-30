@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\CoffreRepository;
+use App\Repository\VitrineRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: CoffreRepository::class)]
-class Coffre
+#[ORM\Entity(repositoryClass: VitrineRepository::class)]
+class Vitrine
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -18,14 +18,17 @@ class Coffre
     #[ORM\Column(length: 255)]
     private ?string $description = null;
 
+    #[ORM\Column]
+    private ?bool $publiee = null;
+
+    #[ORM\ManyToOne(inversedBy: 'vitrines')]
+    private ?Member $createur = null;
+
     /**
      * @var Collection<int, Montre>
      */
-    #[ORM\OneToMany(targetEntity: Montre::class, mappedBy: 'coffre', orphanRemoval: true)]
+    #[ORM\ManyToMany(targetEntity: Montre::class, inversedBy: 'vitrines')]
     private Collection $montres;
-
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    private ?Member $member = null;
 
     public function __construct()
     {
@@ -49,6 +52,30 @@ class Coffre
         return $this;
     }
 
+    public function isPubliee(): ?bool
+    {
+        return $this->publiee;
+    }
+
+    public function setPubliee(bool $publiee): static
+    {
+        $this->publiee = $publiee;
+
+        return $this;
+    }
+
+    public function getCreateur(): ?Member
+    {
+        return $this->createur;
+    }
+
+    public function setCreateur(?Member $createur): static
+    {
+        $this->createur = $createur;
+
+        return $this;
+    }
+
     /**
      * @return Collection<int, Montre>
      */
@@ -61,7 +88,6 @@ class Coffre
     {
         if (!$this->montres->contains($montre)) {
             $this->montres->add($montre);
-            $montre->setCoffre($this);
         }
 
         return $this;
@@ -69,23 +95,7 @@ class Coffre
 
     public function removeMontre(Montre $montre): static
     {
-        if ($this->montres->removeElement($montre)) {
-            if ($montre->getCoffre() === $this) {
-                $montre->setCoffre(null);
-            }
-        }
-
-        return $this;
-    }
-
-    public function getMember(): ?Member
-    {
-        return $this->member;
-    }
-
-    public function setMember(?Member $member): static
-    {
-        $this->member = $member;
+        $this->montres->removeElement($montre);
 
         return $this;
     }
