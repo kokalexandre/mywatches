@@ -31,8 +31,8 @@
     <ul>
       {% for m in coffre.montres %}
         <li>
-          <a href="{{ path('montre_show', { id: m.id }) }}">
-            #{{ m.id }} — {{ m.marque }} {{ m.reference }}
+          <a href="{{ path('app_montre_show', {'id': m.id}) }}">
+            Gérer #{{ m.id }} — {{ m.marque }} {{ m.reference }}
           </a>
         </li>
       {% endfor %}

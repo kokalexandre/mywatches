@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Montre (publique){% endblock %}
+
+{% block body %}
+  <h1>Montre (publique)</h1>
+
+  <table class="table">
+    <tbody>
+      <tr><th>Id</th><td>{{ montre.id }}</td></tr>
+      <tr><th>Marque</th><td>{{ montre.marque }}</td></tr>
+      <tr><th>Référence</th><td>{{ montre.reference }}</td></tr>
+      <tr><th>Description</th><td>{{ montre.description }}</td></tr>
+      <tr><th>Année</th><td>{{ montre.annee ?? '—' }}</td></tr>
+    </tbody>
+  </table>
+
+  <a href="{{ path('app_vitrine_show', {'id': vitrine.id}) }}">Retour à la vitrine</a>
+{% endblock %}

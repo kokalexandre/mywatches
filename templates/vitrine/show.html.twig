@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Vitrine{% endblock %}
+
+{% block body %}
+    <h1>Vitrine</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ vitrine.id }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ vitrine.description }}</td>
+            </tr>
+            <tr>
+                <th>Publiee</th>
+                <td>{{ vitrine.publiee ? 'Yes' : 'No' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    {# === Bloc Étape 3 : liste des montres de la vitrine === #}
+    <h2>Montres de cette vitrine</h2>
+    {% if vitrine.montres is empty %}
+        <p>Aucune montre dans cette vitrine.</p>
+    {% else %}
+        <ul>
+            {% for m in vitrine.montres %}
+                <li>
+                    <a href="{{ path('app_vitrine_montre_show', { vitrineId: vitrine.id, id: m.id }) }}">
+                        #{{ m.id }} — {{ m.marque }} {{ m.reference }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    {# === Fin du bloc Étape 3 === #}
+
+    <a href="{{ path('app_vitrine_index') }}">back to list</a>
+    <a href="{{ path('app_vitrine_edit', {'id': vitrine.id}) }}">edit</a>
+    {{ include('vitrine/_delete_form.html.twig') }}
+{% endblock %}
+

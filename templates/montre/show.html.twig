@@ -1,27 +1,38 @@
-{# templates/montre/show.html.twig #}
 {% extends 'base.html.twig' %}
 
-{% block title %}Montre n°{{ montre.id }}{% endblock %}
+{% block title %}Montre{% endblock %}
 
 {% block body %}
-  <h1>Montre</h1>
+    <h1>Montre</h1>
 
-  <table class="table" border="1" cellpadding="6">
-    <tbody>
-      <tr><th>Id</th><td>{{ montre.id }}</td></tr>
-      <tr><th>Description</th><td>{{ montre.description }}</td></tr>
-      <tr><th>Marque</th><td>{{ montre.marque }}</td></tr>
-      <tr><th>Référence</th><td>{{ montre.reference }}</td></tr>
-      <tr><th>Année</th><td>{{ montre.annee is not null ? montre.annee : '—' }}</td></tr>
-    </tbody>
-  </table>
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ montre.id }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ montre.description }}</td>
+            </tr>
+            <tr>
+                <th>Marque</th>
+                <td>{{ montre.marque }}</td>
+            </tr>
+            <tr>
+                <th>Reference</th>
+                <td>{{ montre.reference }}</td>
+            </tr>
+            <tr>
+                <th>Annee</th>
+                <td>{{ montre.annee }}</td>
+            </tr>
+        </tbody>
+    </table>
 
-  {# Lien inverse vers le coffre parent #}
-  {% if montre.coffre %}
-    <p>
-      <a href="{{ path('coffre_show', { id: montre.coffre.id }) }}">← Back to coffre #{{ montre.coffre.id }}</a>
-    </p>
-  {% endif %}
+    <a href="{{ path('app_montre_index') }}">back to list</a>
 
-  <p><a href="{{ path('coffre_list') }}">← Back coffres</a></p>
+    <a href="{{ path('app_montre_edit', {'id': montre.id}) }}">edit</a>
+
+    {{ include('montre/_delete_form.html.twig') }}
 {% endblock %}

@@ -8,6 +8,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use App\Entity\Member;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use App\Entity\Vitrine;
 
 class AppFixtures extends Fixture
 {
@@ -61,6 +62,42 @@ class AppFixtures extends Fixture
         yield ["Toolwatch iconique",     "Panerai",             "Luminor Base PAM00112", 2008, "Coffre #3 - vintage"];
         yield ["Plongeuse vintage",      "Seiko",               "62MAS 6217-8001",   1967, "Coffre #3 - vintage"];
     }
+
+    /**
+     * Génère des vitrines de démonstration :
+    *  [description, publiee(bool), montres: array<[marque, reference]>]
+    * @return \Generator<array{0:string,1:bool,2:array<int,array{0:string,1:string}>}>
+    */
+    private static function vitrinesDataGenerator(): \Generator
+    {
+        yield ["Sport et Toolwatches", true, [
+            ["Rolex", "Submariner 124060"],
+            ["Omega", "Seamaster 300M"],
+            ["Tudor", "Black Bay 58"],
+            ["Seiko", "SKX007"],
+            ["Hamilton", "Khaki"],
+        ]];
+
+        yield ["Dress watches", false, [
+            ["Patek Philippe", "Calatrava 6119R"],
+            ["Jaeger-LeCoultre", "Reverso Classic"],
+            ["Cartier", "Tank Louis"],
+            ["A. Lange & Söhne", "Lange 1"],
+            ["Breguet", "Classique 5177"],
+            ["Grand Seiko", "SBGA211 \"Snowflake\""],
+            ["Nomos Glashütte", "Tangente 38"],
+        ]];
+
+        yield ["Vintage et Icônes", true, [
+            ["Seiko", "62MAS 6217-8001"],
+            ["Panerai", "Luminor Base PAM00112"],
+            ["Omega", "Speedmaster"],
+            ["Audemars Piguet", "Royal Oak 15202ST"],
+            ["Patek Philippe", "Nautilus 5711/1A"],
+            ["Vacheron Constantin", "Overseas 4500V"],
+        ]];
+    }
+
 
 
     /**
@@ -118,6 +155,25 @@ class AppFixtures extends Fixture
         }
 
         $manager->flush();
+
+        $montreRepo = $manager->getRepository(Montre::class);
+
+        foreach (self::vitrinesDataGenerator() as [$vDesc, $publiee, $pairs]) {
+            $vitrine = (new Vitrine())
+                ->setDescription($vDesc)
+                ->setPubliee($publiee);
+
+        foreach ($pairs as [$marque, $ref]) {
+            $m = $montreRepo->findOneBy(['marque' => $marque, 'reference' => $ref]);
+            if ($m) {
+                $vitrine->addMontre($m); // méthode ManyToMany générée par make:entity
+            }
+        }
+
+        $manager->persist($vitrine);
+    }
+
+    $manager->flush();
     }
 
 }

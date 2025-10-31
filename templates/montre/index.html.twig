@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Montre index{% endblock %}
+
+{% block body %}
+    <h1>Montre index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Description</th>
+                <th>Marque</th>
+                <th>Reference</th>
+                <th>Annee</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for montre in montres %}
+            <tr>
+                <td>{{ montre.id }}</td>
+                <td>{{ montre.description }}</td>
+                <td>{{ montre.marque }}</td>
+                <td>{{ montre.reference }}</td>
+                <td>{{ montre.annee }}</td>
+                <td>
+                    <a href="{{ path('app_montre_show', {'id': montre.id}) }}">show</a>
+                    <a href="{{ path('app_montre_edit', {'id': montre.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_montre_new') }}">Create new</a>
+{% endblock %}
