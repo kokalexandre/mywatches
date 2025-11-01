@@ -9,6 +9,7 @@ use App\Repository\VitrineRepository;
 use App\Repository\MontreRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -80,31 +81,28 @@ final class VitrineController extends AbstractController
 
         return $this->redirectToRoute('app_vitrine_index', [], Response::HTTP_SEE_OTHER);
     }
-    
+
+    /**
+     * Affiche une Montre dans le contexte d'une Vitrine (publique).
+     * URL finale (grâce au préfixe de classe /vitrine) :
+     *   /vitrine/{vitrine_id}/montre/{montre_id}
+     */
     #[Route(
-        '/vitrine/{vitrineId}/montre/{id}',
+        '/{vitrine_id}/montre/{montre_id}',
         name: 'app_vitrine_montre_show',
-        requirements: ['vitrineId' => '\d+', 'id' => '\d+'],
+        requirements: ['vitrine_id' => '\d+', 'montre_id' => '\d+'],
         methods: ['GET']
     )]
     public function montreShow(
-        VitrineRepository $vitrineRepo,
-        MontreRepository $montreRepo,
-        int $vitrineId,
-        int $id
+        #[MapEntity(id: 'vitrine_id')] Vitrine $vitrine,
+        #[MapEntity(id: 'montre_id')]  Montre  $montre
     ): Response {
-        $vitrine = $vitrineRepo->find($vitrineId);
-        if (!$vitrine) {
-            throw $this->createNotFoundException('Vitrine introuvable');
-        }
-
-        $montre = $montreRepo->find($id);
-        if (!$montre) {
-            throw $this->createNotFoundException('Montre introuvable');
-        }
-
         if (!$vitrine->getMontres()->contains($montre)) {
             throw $this->createNotFoundException('Cette montre ne fait pas partie de cette vitrine.');
+        }
+
+        if (method_exists($vitrine, 'isPubliee') && !$vitrine->isPubliee()) {
+            throw $this->createAccessDeniedException('Accès refusé : vitrine non publique.');
         }
 
         return $this->render('vitrine/montre_show.html.twig', [
@@ -113,3 +111,4 @@ final class VitrineController extends AbstractController
         ]);
     }
 }
+
