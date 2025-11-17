@@ -19,9 +19,8 @@ class MontreType extends AbstractType
             ->add('marque')
             ->add('reference')
             ->add('annee')
-            ->add('coffre', EntityType::class, [
-                'class' => Coffre::class,
-                'choice_label' => 'id',
+            ->add('coffre', null, [
+                'disabled' => true,
             ])
             ->add('vitrines', EntityType::class, [
                 'class' => Vitrine::class,

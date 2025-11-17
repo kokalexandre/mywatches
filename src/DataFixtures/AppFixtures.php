@@ -64,7 +64,7 @@ class AppFixtures extends Fixture
     }
 
     /**
-     * Génère des vitrines de démonstration :
+    * Génère des vitrines de démonstration :
     *  [description, publiee(bool), montres: array<[marque, reference]>]
     * @return \Generator<array{0:string,1:bool,2:array<int,array{0:string,1:string}>}>
     */
@@ -99,7 +99,6 @@ class AppFixtures extends Fixture
     }
 
 
-
     /**
      * Generates initialization data for members :
      *  [email, plain text password]
@@ -111,69 +110,236 @@ class AppFixtures extends Fixture
         yield ['slash@localhost','123456'];
     }
 
-    public function load(ObjectManager $manager): void
-    {
+/**
+ * Génère des données de test arborescentes par membre (version XL) :
+ *
+ * Structure de retour :
+ * yield [
+ *   'member'   => ['email' => string, 'password' => string],
+ *   'coffre'   => ['description' => string],
+ *   'montres'  => [
+ *       ['description'=> string, 'marque'=> string, 'reference'=> string, 'annee'=> ?int],
+ *       ...
+ *   ],
+ *   'vitrines' => [
+ *       ['description'=> string, 'publiee'=> bool, 'montres'=> [ ['marque'=>string,'reference'=>string], ... ]],
+ *       ...
+ *   ],
+ * ];
+ *
+ * @return \Generator
+ */
+private static function membersTreeGenerator(): \Generator
+{
+    // Membre 1 : quotidien & sport
+    yield [
+        'member'  => ['email' => 'olivier@localhost', 'password' => '123456'],
+        'coffre'  => ['description' => 'Coffre #1 - quotidien & sport'],
+        'montres' => [
+            ['description' => 'Plongeuse robuste',           'marque' => 'Seiko',           'reference' => 'SKX007',               'annee' => 2010],
+            ['description' => 'Chronographe de légende',     'marque' => 'Omega',           'reference' => 'Speedmaster Pro',      'annee' => 2004],
+            ['description' => 'Toolwatch moderne',           'marque' => 'Rolex',           'reference' => 'Explorer I 214270',    'annee' => 2018],
+            ['description' => 'GMT de voyage',               'marque' => 'Tudor',           'reference' => 'Black Bay GMT',        'annee' => 2021],
+            ['description' => 'Diver céramique',             'marque' => 'Omega',           'reference' => 'Seamaster 300M 210.30','annee' => 2019],
+        ],
+        'vitrines' => [
+            [
+                'description' => 'Plongeuses & toolwatches',
+                'publiee'     => true,
+                'montres'     => [
+                    ['marque' => 'Seiko', 'reference' => 'SKX007'],
+                    ['marque' => 'Omega', 'reference' => 'Seamaster 300M 210.30'],
+                    ['marque' => 'Rolex', 'reference' => 'Explorer I 214270'],
+                    ['marque' => 'Tudor', 'reference' => 'Black Bay GMT'],
+                ],
+            ],
+            [
+                'description' => 'Speedmaster focus',
+                'publiee'     => false,
+                'montres'     => [
+                    ['marque' => 'Omega', 'reference' => 'Speedmaster Pro'],
+                ],
+            ],
+        ],
+    ];
 
-        foreach ($this->membersGenerator() as [$email, $plainPassword]) {
-            $user = new Member();
-            $password = $this->hasher->hashPassword($user, $plainPassword);
-            $user->setEmail($email);
-            $user->setPassword($password);
+    // Membre 2 : dress & classiques
+    yield [
+        'member'  => ['email' => 'slash@localhost', 'password' => '123456'],
+        'coffre'  => ['description' => 'Coffre #2 - dress & classiques'],
+        'montres' => [
+            ['description' => 'Dress simple',                'marque' => 'Tissot',              'reference' => 'Visodate',             'annee' => 2018],
+            ['description' => 'Classique art déco',          'marque' => 'Jaeger-LeCoultre',    'reference' => 'Reverso Classic Medium','annee' => 2016],
+            ['description' => 'Haute horlogerie iconique',   'marque' => 'A. Lange & Söhne',    'reference' => 'Saxonia Thin 37',      'annee' => 2019],
+            ['description' => 'Classique guilloché',         'marque' => 'Breguet',             'reference' => 'Classique 5140',       'annee' => 2015],
+            ['description' => 'Minimalisme bauhaus',         'marque' => 'Nomos Glashütte',     'reference' => 'Lambda 39',            'annee' => 2020],
+        ],
+        'vitrines' => [
+            [
+                'description' => 'Dress watches formelles',
+                'publiee'     => true,
+                'montres'     => [
+                    ['marque' => 'Jaeger-LeCoultre', 'reference' => 'Reverso Classic Medium'],
+                    ['marque' => 'A. Lange & Söhne', 'reference' => 'Saxonia Thin 37'],
+                    ['marque' => 'Breguet',          'reference' => 'Classique 5140'],
+                    ['marque' => 'Nomos Glashütte',  'reference' => 'Lambda 39'],
+                ],
+            ],
+            [
+                'description' => 'Dress accessibles',
+                'publiee'     => false,
+                'montres'     => [
+                    ['marque' => 'Tissot', 'reference' => 'Visodate'],
+                ],
+            ],
+        ],
+    ];
 
-            // $roles = array();
-            // $roles[] = $role;
-            // $user->setRoles($roles);
+    // Membre 3 : vintage & chrono
+    yield [
+        'member'  => ['email' => 'vintage@localhost', 'password' => '123456'],
+        'coffre'  => ['description' => 'Coffre #3 - vintage & chrono'],
+        'montres' => [
+            ['description' => 'Plongeuse 60s',               'marque' => 'Seiko',               'reference' => '62MAS 6217-8000',     'annee' => 1966],
+            ['description' => 'Chronographe aviation',       'marque' => 'Breitling',           'reference' => 'Navitimer 806',       'annee' => 1972],
+            ['description' => 'Chrono panda',                'marque' => 'Heuer',               'reference' => 'Autavia 2446C',       'annee' => 1970],
+            ['description' => 'Plongeuse française',         'marque' => 'Yema',                'reference' => 'Superman 53.00.16',   'annee' => 1975],
+            ['description' => 'Chrono course auto',          'marque' => 'Omega',               'reference' => 'Speedmaster Mk II',   'annee' => 1971],
+        ],
+        'vitrines' => [
+            [
+                'description' => 'Chronos vintage',
+                'publiee'     => true,
+                'montres'     => [
+                    ['marque' => 'Breitling', 'reference' => 'Navitimer 806'],
+                    ['marque' => 'Heuer',     'reference' => 'Autavia 2446C'],
+                    ['marque' => 'Omega',     'reference' => 'Speedmaster Mk II'],
+                ],
+            ],
+            [
+                'description' => 'Plongeuses vintage',
+                'publiee'     => true,
+                'montres'     => [
+                    ['marque' => 'Seiko', 'reference' => '62MAS 6217-8000'],
+                    ['marque' => 'Yema',  'reference' => 'Superman 53.00.16'],
+                ],
+            ],
+        ],
+    ];
 
-            $manager->persist($user);
-        }
-        $manager->flush();
+    // Membre 4 : indépendants & micro-marques
+    yield [
+        'member'  => ['email' => 'indep@localhost', 'password' => '123456'],
+        'coffre'  => ['description' => 'Coffre #4 - indépendants & micro-marques'],
+        'montres' => [
+            ['description' => 'Indépendant japonais',        'marque' => 'Kurono Tokyo',        'reference' => 'Chronograph 1',       'annee' => 2022],
+            ['description' => 'Micro-marque française',      'marque' => 'Serica',              'reference' => '4512 Commando',       'annee' => 2021],
+            ['description' => 'Plongeuse titanium',          'marque' => 'Baltic',              'reference' => 'Aquascaphe Titanium', 'annee' => 2022],
+            ['description' => 'Field suisse moderne',        'marque' => 'Formex',              'reference' => 'Field Automatic',     'annee' => 2023],
+            ['description' => 'Dress suisse indépendante',   'marque' => 'Habring²',            'reference' => 'Felix',               'annee' => 2019],
+        ],
+        'vitrines' => [
+            [
+                'description' => 'Micro-marques toolwatch',
+                'publiee'     => true,
+                'montres'     => [
+                    ['marque' => 'Serica', 'reference' => '4512 Commando'],
+                    ['marque' => 'Baltic', 'reference' => 'Aquascaphe Titanium'],
+                    ['marque' => 'Formex', 'reference' => 'Field Automatic'],
+                ],
+            ],
+            [
+                'description' => 'Indépendants haut de gamme',
+                'publiee'     => false,
+                'montres'     => [
+                    ['marque' => 'Kurono Tokyo', 'reference' => 'Chronograph 1'],
+                    ['marque' => 'Habring²',     'reference' => 'Felix'],
+                ],
+            ],
+        ],
+    ];
 
-        foreach (self::coffresDataGenerator() as [$description]) {
-            $coffre = (new Coffre())->setDescription($description);
-            $manager->persist($coffre);
-        }
-        $manager->flush();
+    // Membre 5 : G-Shock & digitales / usage intensif
+    yield [
+        'member'  => ['email' => 'tooluser@localhost', 'password' => '123456'],
+        'coffre'  => ['description' => 'Coffre #5 - G-Shock & digitales'],
+        'montres' => [
+            ['description' => 'G-Shock carrée',              'marque' => 'Casio',               'reference' => 'GWM5610-1',           'annee' => 2018],
+            ['description' => 'G-Shock métal',               'marque' => 'Casio',               'reference' => 'GMW-B5000D-1',        'annee' => 2020],
+            ['description' => 'Digitale rétro',              'marque' => 'Casio',               'reference' => 'A168WA-1',            'annee' => 2015],
+            ['description' => 'Solar tough',                 'marque' => 'Casio',               'reference' => 'PRW-3000 Pro Trek',   'annee' => 2017],
+            ['description' => 'Smartwatch sportive',         'marque' => 'Garmin',              'reference' => 'Fenix 7X',            'annee' => 2023],
+        ],
+        'vitrines' => [
+            [
+                'description' => 'G-Shock favorites',
+                'publiee'     => true,
+                'montres'     => [
+                    ['marque' => 'Casio', 'reference' => 'GWM5610-1'],
+                    ['marque' => 'Casio', 'reference' => 'GMW-B5000D-1'],
+                    ['marque' => 'Casio', 'reference' => 'A168WA-1'],
+                ],
+            ],
+            [
+                'description' => 'Outdoor & sport',
+                'publiee'     => true,
+                'montres'     => [
+                    ['marque' => 'Casio',  'reference' => 'PRW-3000 Pro Trek'],
+                    ['marque' => 'Garmin', 'reference' => 'Fenix 7X'],
+                ],
+            ],
+        ],
+    ];
+}
 
-        $coffreRepo = $manager->getRepository(Coffre::class);
-        foreach (self::montresDataGenerator() as [$desc, $marque, $ref, $annee, $coffreDesc]) {
-            /** @var Coffre|null $coffre */
-            $coffre = $coffreRepo->findOneBy(['description' => $coffreDesc]);
 
-            if (!$coffre) {
-                $coffre = (new Coffre())->setDescription($coffreDesc);
-                $manager->persist($coffre);
-            }
 
-            $montre = (new Montre())
-                ->setDescription($desc)
-                ->setMarque($marque)
-                ->setReference($ref)
-                ->setAnnee($annee)
-                ->setCoffre($coffre);
+public function load(ObjectManager $manager): void
+{
+    foreach (self::membersTreeGenerator() as $row) {
+        // 1) Membre
+        $user = new Member();
+        $user->setEmail($row['member']['email']);
+        $user->setPassword($this->hasher->hashPassword($user, $row['member']['password']));
+        $manager->persist($user);
+
+        // 2) Coffre (OneToOne avec Member)
+        $coffre = new Coffre();
+        $coffre->setDescription($row['coffre']['description'] ?? 'Coffre sans description');
+        $coffre->setMember($user);
+        $manager->persist($coffre);
+
+        // 3) Montres (OneToMany Coffre -> Montre)
+        $indexMontres = [];
+        foreach ($row['montres'] as $m) {
+            $montre = new Montre();
+            $montre->setDescription($m['description'] ?? null);
+            $montre->setMarque($m['marque'] ?? '');
+            $montre->setReference($m['reference'] ?? '');
+            $montre->setAnnee($m['annee'] ?? null);
+            $montre->setCoffre($coffre);
 
             $manager->persist($montre);
+
+            $key = mb_strtolower(trim(($m['marque'] ?? '').'|'.($m['reference'] ?? '')));
+            $indexMontres[$key] = $montre;
         }
 
-        $manager->flush();
-
-        $montreRepo = $manager->getRepository(Montre::class);
-
-        foreach (self::vitrinesDataGenerator() as [$vDesc, $publiee, $pairs]) {
-            $vitrine = (new Vitrine())
-                ->setDescription($vDesc)
-                ->setPubliee($publiee);
-
-        foreach ($pairs as [$marque, $ref]) {
-            $m = $montreRepo->findOneBy(['marque' => $marque, 'reference' => $ref]);
-            if ($m) {
-                $vitrine->addMontre($m); // méthode ManyToMany générée par make:entity
+        // 4) Vitrines (ManyToMany Vitrine <-> Montre)
+        foreach ($row['vitrines'] as $v) {
+            $vitrine = new Vitrine();
+            $vitrine->setDescription($v['description'] ?? '');
+            $vitrine->setPubliee((bool)($v['publiee'] ?? false));
+            foreach ($v['montres'] as $mref) {
+                $k = mb_strtolower(trim(($mref['marque'] ?? '').'|'.($mref['reference'] ?? '')));
+                if (isset($indexMontres[$k])) {
+                    $vitrine->addMontre($indexMontres[$k]);
+                }
             }
+
+            $manager->persist($vitrine);
         }
-
-        $manager->persist($vitrine);
     }
-
     $manager->flush();
-    }
-
+}
 }

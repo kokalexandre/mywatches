@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Membre #{{ member.id }}{% endblock %}
+
+{% block body %}
+    <h1>Membre</h1>
+
+    <table class="table">
+        <tbody>
+        <tr>
+            <th>Id</th>
+            <td>{{ member.id }}</td>
+        </tr>
+        <tr>
+            <th>Email</th>
+            <td>{{ member.email }}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    {# Lien vers le coffre du membre, si un coffre est associé #}
+    {% if member.coffre is defined and member.coffre %}
+        <p>
+            <a href="{{ path('coffre_show', { id: member.coffre.id }) }}">
+                Mon coffre
+            </a>
+        </p>
+    {% else %}
+        <p>Ce membre n'a pas encore de coffre.</p>
+    {% endif %}
+
+    <p>
+        <a href="{{ path('app_member_index') }}">Retour à la liste des membres</a>
+    </p>
+{% endblock %}

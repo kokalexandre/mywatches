@@ -24,7 +24,7 @@ class Coffre
     #[ORM\OneToMany(targetEntity: Montre::class, mappedBy: 'coffre', orphanRemoval: true)]
     private Collection $montres;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(inversedBy: 'coffre', cascade: ['persist', 'remove'])]
     private ?Member $member = null;
 
     public function __construct()
@@ -89,4 +89,18 @@ class Coffre
 
         return $this;
     }
+
+    public function __toString(): string
+    {
+        if ($this->description) {
+            return $this->description;
+        }
+
+        if ($this->id !== null) {
+            return 'Coffre n°'.$this->id;
+        }
+
+        return 'Coffre (non sauvegardé)';
+    }
+
 }

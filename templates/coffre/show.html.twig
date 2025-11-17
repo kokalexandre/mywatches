@@ -39,5 +39,13 @@
     </ul>
   {% endif %}
 
-  <p><a href="{{ path('coffre_list') }}">← Back to list</a></p>
+  <p class="mt-3">
+    <a class="btn btn-primary" href="{{ path('app_montre_new', { id: coffre.id }) }}">
+      Ajouter une montre
+    </a>
+  </p>
+
+  <a href="{{ path('app_member_show', { id: coffre.member.id }) }}">
+    Retour au membre
+  </a>
 {% endblock %}

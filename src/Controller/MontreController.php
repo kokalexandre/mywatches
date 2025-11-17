@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Montre;
 use App\Form\MontreType;
+use App\Entity\Coffre;
 use App\Repository\MontreRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,10 +23,13 @@ final class MontreController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_montre_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/new/{id}', name: 'app_montre_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager, Coffre $coffre): Response
     {
+     
         $montre = new Montre();
+        $montre->setCoffre($coffre);
+
         $form = $this->createForm(MontreType::class, $montre);
         $form->handleRequest($request);
 
@@ -33,7 +37,12 @@ final class MontreController extends AbstractController
             $entityManager->persist($montre);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_montre_index', [], Response::HTTP_SEE_OTHER);
+        
+            return $this->redirectToRoute(
+                'coffre_show',              
+                ['id' => $coffre->getId()],
+                Response::HTTP_SEE_OTHER
+            );
         }
 
         return $this->render('montre/new.html.twig', [
@@ -41,6 +50,7 @@ final class MontreController extends AbstractController
             'form' => $form,
         ]);
     }
+
 
     #[Route('/{id}', name: 'app_montre_show', methods: ['GET'])]
     public function show(Montre $montre): Response
@@ -59,7 +69,11 @@ final class MontreController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_montre_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute(
+            'coffre_show',   
+            ['id' => $montre->getCoffre()->getId()],
+            Response::HTTP_SEE_OTHER
+            );
         }
 
         return $this->render('montre/edit.html.twig', [
@@ -71,9 +85,19 @@ final class MontreController extends AbstractController
     #[Route('/{id}', name: 'app_montre_delete', methods: ['POST'])]
     public function delete(Request $request, Montre $montre, EntityManagerInterface $entityManager): Response
     {
+        $coffreId = $montre->getCoffre() ? $montre->getCoffre()->getId() : null;
+
         if ($this->isCsrfTokenValid('delete'.$montre->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($montre);
             $entityManager->flush();
+        }
+
+        if ($coffreId !== null) {
+            return $this->redirectToRoute(
+                'coffre_show',  
+                ['id' => $coffreId],
+                Response::HTTP_SEE_OTHER
+            );
         }
 
         return $this->redirectToRoute('app_montre_index', [], Response::HTTP_SEE_OTHER);

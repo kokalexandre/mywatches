@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Coffre;
 use App\Repository\MemberRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -38,6 +39,12 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\OneToMany(targetEntity: Vitrine::class, mappedBy: 'createur')]
     private Collection $vitrines;
+
+
+    #[ORM\OneToOne(mappedBy: 'member', cascade: ['persist', 'remove'])]
+    private ?Coffre $coffre = null;
+
+
 
     public function __construct()
     {
@@ -77,7 +84,6 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
@@ -132,10 +138,14 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+        public function getCoffre(): ?Coffre
+    {
+        return $this->coffre;
+    }
+
     public function removeVitrine(Vitrine $vitrine): static
     {
         if ($this->vitrines->removeElement($vitrine)) {
-            // set the owning side to null (unless already changed)
             if ($vitrine->getCreateur() === $this) {
                 $vitrine->setCreateur(null);
             }
