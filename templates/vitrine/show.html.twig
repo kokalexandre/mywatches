@@ -51,8 +51,8 @@
 
     <div class="mt-3 d-flex flex-wrap gap-2">
         <a class="btn btn-outline-secondary"
-           href="{{ path('app_vitrine_index') }}">
-            ← Retour à la liste
+           href="{{ path('app_member_show', { id: vitrine.createur.id }) }}">
+            ← Retour au membre
         </a>
 
         <a class="btn btn-primary"
