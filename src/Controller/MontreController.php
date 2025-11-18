@@ -11,6 +11,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+
 
 #[Route('/montre')]
 final class MontreController extends AbstractController
@@ -34,16 +36,32 @@ final class MontreController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            /** @var UploadedFile|null $imageFile */
+            $imageFile = $form->get('imageFile')->getData();
+
+            if ($imageFile) {
+
+                $uploadsDir = $this->getParameter('kernel.project_dir') . '/public/uploads/montres';
+
+                if (!is_dir($uploadsDir)) {
+                    mkdir($uploadsDir, 0777, true);
+                }
+
+                $newFilename = uniqid('montre_', true) . '.' . $imageFile->guessExtension();
+
+                $imageFile->move($uploadsDir, $newFilename);
+
+                $montre->setImageFilename($newFilename);
+            }
+
             $entityManager->persist($montre);
             $entityManager->flush();
 
-        
-            return $this->redirectToRoute(
-                'coffre_show',              
-                ['id' => $coffre->getId()],
-                Response::HTTP_SEE_OTHER
-            );
+            return $this->redirectToRoute('coffre_show', [
+                'id' => $montre->getCoffre()->getId()
+            ], Response::HTTP_SEE_OTHER);
         }
+
 
         return $this->render('montre/new.html.twig', [
             'montre' => $montre,
@@ -67,14 +85,29 @@ final class MontreController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            /** @var UploadedFile|null $imageFile */
+            $imageFile = $form->get('imageFile')->getData();
+
+            if ($imageFile) {
+                $uploadsDir = $this->getParameter('kernel.project_dir') . '/public/uploads/montres';
+
+                if (!is_dir($uploadsDir)) {
+                    mkdir($uploadsDir, 0777, true);
+                }
+
+                $newFilename = uniqid('montre_', true) . '.' . $imageFile->guessExtension();
+                $imageFile->move($uploadsDir, $newFilename);
+
+                $montre->setImageFilename($newFilename);
+            }
+
             $entityManager->flush();
 
-            return $this->redirectToRoute(
-            'coffre_show',   
-            ['id' => $montre->getCoffre()->getId()],
-            Response::HTTP_SEE_OTHER
-            );
+            return $this->redirectToRoute('coffre_show', [
+                'id' => $montre->getCoffre()->getId()
+            ], Response::HTTP_SEE_OTHER);
         }
+
 
         return $this->render('montre/edit.html.twig', [
             'montre' => $montre,

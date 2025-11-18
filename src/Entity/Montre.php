@@ -27,6 +27,10 @@ class Montre
     #[ORM\Column(nullable: true)]
     private ?int $annee = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $imageFilename = null;
+
+
     #[ORM\ManyToOne(inversedBy: 'montres')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Coffre $coffre = null;
@@ -103,6 +107,18 @@ class Montre
     public function setCoffre(?Coffre $coffre): static
     {
         $this->coffre = $coffre;
+
+        return $this;
+    }
+
+    public function getImageFilename(): ?string
+    {
+        return $this->imageFilename;
+    }
+
+    public function setImageFilename(?string $imageFilename): static
+    {
+        $this->imageFilename = $imageFilename;
 
         return $this;
     }

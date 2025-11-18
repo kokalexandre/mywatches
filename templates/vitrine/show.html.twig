@@ -29,16 +29,20 @@
     {% else %}
         <ul class="list-group mb-3">
             {% for m in vitrine.montres %}
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <span>
+                <li class="mb-2">
+                    <a href="{{ path('app_vitrine_montre_show', {
+                        vitrine_id: vitrine.id,
+                        montre_id:  m.id
+                    }) }}">
+                        {% if m.imageFilename %}
+                            <img
+                                src="{{ asset('uploads/montres/' ~ m.imageFilename) }}"
+                                alt="Photo de {{ m.marque }} {{ m.reference }}"
+                                style="max-width: 80px; max-height: 80px;"
+                                class="me-2 rounded border"
+                            >
+                        {% endif %}
                         #{{ m.id }} — {{ m.marque }} {{ m.reference }}
-                    </span>
-                    <a class="btn btn-sm btn-outline-primary"
-                       href="{{ path('app_vitrine_montre_show', {
-                           vitrine_id: vitrine.id,
-                           montre_id:  m.id
-                       }) }}">
-                        Voir la montre
                     </a>
                 </li>
             {% endfor %}
