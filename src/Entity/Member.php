@@ -153,4 +153,14 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function __toString(): string
+    {
+
+        if ($this->email) {
+            return $this->email;
+        }
+
+        return 'Member #' . ($this->id ?? '?');
+    }
 }

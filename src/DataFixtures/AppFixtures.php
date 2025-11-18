@@ -330,15 +330,19 @@ public function load(ObjectManager $manager): void
             $vitrine = new Vitrine();
             $vitrine->setDescription($v['description'] ?? '');
             $vitrine->setPubliee((bool)($v['publiee'] ?? false));
+
+            $vitrine->setCreateur($user);
+
             foreach ($v['montres'] as $mref) {
                 $k = mb_strtolower(trim(($mref['marque'] ?? '').'|'.($mref['reference'] ?? '')));
                 if (isset($indexMontres[$k])) {
                     $vitrine->addMontre($indexMontres[$k]);
                 }
             }
-
+            
             $manager->persist($vitrine);
         }
+
     }
     $manager->flush();
 }

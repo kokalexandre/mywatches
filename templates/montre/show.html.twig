@@ -20,19 +20,28 @@
                 <td>{{ montre.marque }}</td>
             </tr>
             <tr>
-                <th>Reference</th>
+                <th>Référence</th>
                 <td>{{ montre.reference }}</td>
             </tr>
             <tr>
-                <th>Annee</th>
+                <th>Année</th>
                 <td>{{ montre.annee }}</td>
             </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('coffre_show', { id: montre.coffre.id }) }}"> Retour au coffre </a>
+    {# Bloc actions propre avec des boutons Bootstrap #}
+    <div class="mt-3 d-flex flex-wrap gap-2">
+        <a class="btn btn-outline-secondary"
+           href="{{ path('coffre_show', { id: montre.coffre.id }) }}">
+            ← Retour au coffre
+        </a>
 
-    <a href="{{ path('app_montre_edit', {'id': montre.id}) }}">edit</a>
+        <a class="btn btn-primary"
+           href="{{ path('app_montre_edit', {'id': montre.id}) }}">
+            Modifier cette montre
+        </a>
 
-    {{ include('montre/_delete_form.html.twig') }}
+        {{ include('montre/_delete_form.html.twig') }}
+    </div>
 {% endblock %}

@@ -4,48 +4,51 @@
 {% block title %}Coffre n°{{ coffre.id }}{% endblock %}
 
 {% block body %}
-  <h1>Coffre</h1>
+    <h1>Coffre</h1>
 
-  {# Pour vérifier le nom exact de la collection (ex: montres), décommente :
-  {% dump(coffre) %}
-  #}
+    <table class="table">
+        <tbody>
+        <tr>
+            <th>Id</th>
+            <td>{{ coffre.id }}</td>
+        </tr>
+        <tr>
+            <th>Description</th>
+            <td>{{ coffre.description }}</td>
+        </tr>
+        </tbody>
+    </table>
 
-  <table class="table" border="1" cellpadding="6">
-    <tbody>
-      <tr>
-        <th>Id</th>
-        <td>{{ coffre.id }}</td>
-      </tr>
-      <tr>
-        <th>Description</th>
-        <td>{{ coffre.description }}</td>
-      </tr>
-    </tbody>
-  </table>
+    <h2 class="mt-4">Montres de ce coffre</h2>
 
-  <h2>Montres de ce coffre</h2>
+    {% if coffre.montres is empty %}
+        <p>Aucune montre dans ce coffre.</p>
+    {% else %}
+        <ul class="list-group mb-3">
+            {% for m in coffre.montres %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>
+                        #{{ m.id }} — {{ m.marque }} {{ m.reference }}
+                    </span>
+                    <a class="btn btn-sm btn-outline-primary"
+                       href="{{ path('app_montre_show', {'id': m.id}) }}">
+                        Gérer cette montre
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 
-  {% if coffre.montres is empty %}
-    <p>Aucune montre dans ce coffre.</p>
-  {% else %}
-    <ul>
-      {% for m in coffre.montres %}
-        <li>
-          <a href="{{ path('app_montre_show', {'id': m.id}) }}">
-            Gérer #{{ m.id }} — {{ m.marque }} {{ m.reference }}
-          </a>
-        </li>
-      {% endfor %}
-    </ul>
-  {% endif %}
+    {# Bloc actions sous la liste #}
+    <div class="mt-3 d-flex flex-wrap gap-2">
+        <a class="btn btn-primary"
+           href="{{ path('app_montre_new', { id: coffre.id }) }}">
+            Ajouter une montre
+        </a>
 
-  <p class="mt-3">
-    <a class="btn btn-primary" href="{{ path('app_montre_new', { id: coffre.id }) }}">
-      Ajouter une montre
-    </a>
-  </p>
-
-  <a href="{{ path('app_member_show', { id: coffre.member.id }) }}">
-    Retour au membre
-  </a>
+        <a class="btn btn-outline-secondary"
+           href="{{ path('app_member_show', { id: coffre.member.id }) }}">
+            ← Retour au membre
+        </a>
+    </div>
 {% endblock %}

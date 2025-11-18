@@ -18,18 +18,72 @@
         </tbody>
     </table>
 
-    {# Lien vers le coffre du membre, si un coffre est associé #}
+    {# Coffre du membre #}
     {% if member.coffre is defined and member.coffre %}
-        <p>
-            <a href="{{ path('coffre_show', { id: member.coffre.id }) }}">
-                Mon coffre
+        <div class="alert alert-light border mt-3">
+            <p class="mb-2">
+                Ce membre possède un coffre associé :
+            </p>
+            <a class="btn btn-primary"
+               href="{{ path('coffre_show', { id: member.coffre.id }) }}">
+                Voir mon coffre
             </a>
-        </p>
+        </div>
     {% else %}
-        <p>Ce membre n'a pas encore de coffre.</p>
+        <div class="alert alert-warning mt-3">
+            Ce membre n'a pas encore de coffre.
+        </div>
     {% endif %}
 
-    <p>
-        <a href="{{ path('app_member_index') }}">Retour à la liste des membres</a>
-    </p>
+    <h2 class="mt-4">Galeries de ce membre</h2>
+
+    <div class="mt-2 mb-3">
+        <a class="btn btn-primary"
+            href="{{ path('app_vitrine_new', { id: member.id }) }}">
+            Créer une nouvelle vitrine
+        </a>
+    </div>
+
+    {% if member.vitrines is empty %}
+        <p>Ce membre n'a pas encore créé de vitrine.</p>
+    {% else %}
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Description</th>
+                <th>Publiée</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for vitrine in member.vitrines %}
+                <tr>
+                    <td>{{ vitrine.id }}</td>
+                    <td>{{ vitrine.description }}</td>
+                    <td>{{ vitrine.publiee ? 'Oui' : 'Non' }}</td>
+                    <td>
+                        <a class="btn btn-sm btn-outline-primary"
+                            href="{{ path('app_vitrine_show', { id: vitrine.id }) }}">
+                            Voir
+                        </a>
+                        <a class="btn btn-sm btn-outline-secondary"
+                            href="{{ path('app_vitrine_edit', { id: vitrine.id }) }}">
+                            Modifier
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+
+    {# Bouton de retour #}
+    <div class="mt-3">
+        <a class="btn btn-outline-secondary"
+           href="{{ path('app_member_index') }}">
+            ← Retour à la liste des membres
+        </a>
+    </div>
 {% endblock %}

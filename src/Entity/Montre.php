@@ -133,4 +133,30 @@ class Montre
 
         return $this;
     }
+
+    public function __toString(): string
+    {
+
+        $parts = [];
+
+        if ($this->marque) {
+            $parts[] = $this->marque;
+        }
+
+        if ($this->reference) {
+            $parts[] = $this->reference;
+        }
+
+        if ($this->description) {
+            $parts[] = '– ' . $this->description;
+        }
+
+        $label = trim(implode(' ', $parts));
+
+        if ($label === '') {
+            $label = 'Montre #' . ($this->id ?? '?');
+        }
+
+        return $label;
+    }
 }
