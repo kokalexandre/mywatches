@@ -133,7 +133,7 @@ private static function membersTreeGenerator(): \Generator
 {
     // Membre 1 : quotidien & sport
     yield [
-        'member'  => ['email' => 'olivier@localhost', 'password' => '123456'],
+        'member'  => ['email' => 'test@localhost', 'password' => '123456'],
         'coffre'  => ['description' => 'Coffre #1 - quotidien & sport'],
         'montres' => [
             ['description' => 'Plongeuse robuste',           'marque' => 'Seiko',           'reference' => 'SKX007',               'annee' => 2010],
@@ -165,7 +165,7 @@ private static function membersTreeGenerator(): \Generator
 
     // Membre 2 : dress & classiques
     yield [
-        'member'  => ['email' => 'slash@localhost', 'password' => '123456'],
+        'member'  => ['email' => 'nicolas@localhost', 'password' => '123456'],
         'coffre'  => ['description' => 'Coffre #2 - dress & classiques'],
         'montres' => [
             ['description' => 'Dress simple',                'marque' => 'Tissot',              'reference' => 'Visodate',             'annee' => 2018],
@@ -197,7 +197,7 @@ private static function membersTreeGenerator(): \Generator
 
     // Membre 3 : vintage & chrono
     yield [
-        'member'  => ['email' => 'vintage@localhost', 'password' => '123456'],
+        'member'  => ['email' => 'alexandre@localhost', 'password' => '123456'],
         'coffre'  => ['description' => 'Coffre #3 - vintage & chrono'],
         'montres' => [
             ['description' => 'Plongeuse 60s',               'marque' => 'Seiko',               'reference' => '62MAS 6217-8000',     'annee' => 1966],
@@ -229,7 +229,7 @@ private static function membersTreeGenerator(): \Generator
 
     // Membre 4 : indépendants & micro-marques
     yield [
-        'member'  => ['email' => 'indep@localhost', 'password' => '123456'],
+        'member'  => ['email' => 'quentin@localhost', 'password' => '123456'],
         'coffre'  => ['description' => 'Coffre #4 - indépendants & micro-marques'],
         'montres' => [
             ['description' => 'Indépendant japonais',        'marque' => 'Kurono Tokyo',        'reference' => 'Chronograph 1',       'annee' => 2022],
@@ -261,7 +261,7 @@ private static function membersTreeGenerator(): \Generator
 
     // Membre 5 : G-Shock & digitales / usage intensif
     yield [
-        'member'  => ['email' => 'tooluser@localhost', 'password' => '123456'],
+        'member'  => ['email' => 'catherine@localhost', 'password' => '123456'],
         'coffre'  => ['description' => 'Coffre #5 - G-Shock & digitales'],
         'montres' => [
             ['description' => 'G-Shock carrée',              'marque' => 'Casio',               'reference' => 'GWM5610-1',           'annee' => 2018],

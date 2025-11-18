@@ -40,17 +40,14 @@ final class MontreController extends AbstractController
             $imageFile = $form->get('imageFile')->getData();
 
             if ($imageFile) {
-
-                $uploadsDir = $this->getParameter('kernel.project_dir') . '/public/uploads/montres';
+                $uploadsDir = $this->getParameter('montres_images_directory');
 
                 if (!is_dir($uploadsDir)) {
                     mkdir($uploadsDir, 0777, true);
                 }
 
                 $newFilename = uniqid('montre_', true) . '.' . $imageFile->guessExtension();
-
                 $imageFile->move($uploadsDir, $newFilename);
-
                 $montre->setImageFilename($newFilename);
             }
 
@@ -89,7 +86,7 @@ final class MontreController extends AbstractController
             $imageFile = $form->get('imageFile')->getData();
 
             if ($imageFile) {
-                $uploadsDir = $this->getParameter('kernel.project_dir') . '/public/uploads/montres';
+                $uploadsDir = $this->getParameter('montres_images_directory');
 
                 if (!is_dir($uploadsDir)) {
                     mkdir($uploadsDir, 0777, true);
@@ -97,7 +94,6 @@ final class MontreController extends AbstractController
 
                 $newFilename = uniqid('montre_', true) . '.' . $imageFile->guessExtension();
                 $imageFile->move($uploadsDir, $newFilename);
-
                 $montre->setImageFilename($newFilename);
             }
 
