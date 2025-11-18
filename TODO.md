@@ -1,16 +1,4 @@
--  **Ajouter l’entité Membre (User)** au modèle *(OBLIGATOIRE — TP3/4)*
--  **Ajouter l’association 1–1 Membre ↔ Coffre** *(OBLIGATOIRE — TP3/4)*
 
----
-
--  **Menus de navigation globaux (layout Twig)** *(OBLIGATOIRE)*
-
----
-
--  **Ajouter l’entité Vitrine** + **association M–N** Vitrine ↔ Montre *(OBLIGATOIRE)*
--  **Contrôleur CRUD Vitrine** *(OBLIGATOIRE — TP7)*
--  **Consulter les montres via les Vitrines publiques** *(OBLIGATOIRE)*
--  **Afficher uniquement les Vitrines publiques** *(OBLIGATOIRE)*
 -  **(Optionnel)** Contextualiser la création d’une Vitrine selon le membre *(OPTIONNEL)*  
 -  **(Optionnel)** Contextualiser l’ajout d’un Objet à une Vitrine *(OPTIONNEL)*
 
