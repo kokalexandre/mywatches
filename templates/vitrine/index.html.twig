@@ -1,38 +1,65 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Vitrine index{% endblock %}
+{% block title %}Vitrines{% endblock %}
 
 {% block body %}
-    <h1>Vitrine index</h1>
+    <h1 class="mb-4">Vitrines</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Description</th>
-                <th>Publiee</th>
-                <th>Montres</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for vitrine in vitrines %}
-            <tr>
-                <td>{{ vitrine.id }}</td>
-                <td>{{ vitrine.description }}</td>
-                <td>{{ vitrine.publiee ? 'Yes' : 'No' }}</td>
-                <td>{{ vitrine.montres|length }}</td>
-                <td>
-                    <a href="{{ path('app_vitrine_show', {'id': vitrine.id}) }}">show</a>
-                    <a href="{{ path('app_vitrine_edit', {'id': vitrine.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="5">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    {% if vitrines is empty %}
+        <div class="alert alert-info">
+            Aucune vitrine disponible pour le moment.
+        </div>
+    {% else %}
+        <div class="row g-3">
+            {% for vitrine in vitrines %}
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card h-100">
 
+                        <div class="card-body d-flex flex-column">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <h5 class="card-title mb-0">
+                                    Vitrine #{{ vitrine.id }}
+                                </h5>
+
+                                {% if vitrine.publiee %}
+                                    <span class="badge bg-success">Publique</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">Privée</span>
+                                {% endif %}
+                            </div>
+
+                            {% if vitrine.description %}
+                                <p class="card-text small text-muted mb-2">
+                                    {{ vitrine.description }}
+                                </p>
+                            {% else %}
+                                <p class="card-text small text-muted mb-2">
+                                    (Aucune description)
+                                </p>
+                            {% endif %}
+
+                            <p class="card-text mb-3">
+                                <strong>{{ vitrine.montres|length }}</strong>
+                                {{ vitrine.montres|length > 1 ? 'montres' : 'montre' }}
+                            </p>
+
+                            <div class="mt-auto d-flex gap-2 flex-wrap">
+                                <a class="btn btn-sm btn-outline-primary"
+                                   href="{{ path('app_vitrine_show', {'id': vitrine.id}) }}">
+                                    Voir la vitrine
+                                </a>
+
+                                <a class="btn btn-sm btn-outline-secondary"
+                                   href="{{ path('app_vitrine_edit', {'id': vitrine.id}) }}">
+                                    Modifier
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
 {% endblock %}
+
