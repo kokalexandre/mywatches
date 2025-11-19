@@ -26,4 +26,19 @@ final class MemberController extends AbstractController
             'member' => $member,
         ]);
     }
+
+    #[Route('/member/me', name: 'app_member_me', methods: ['GET'])]
+    public function me(): Response
+    {
+        $user = $this->getUser();
+
+        if (!$user instanceof Member) {
+            throw $this->createAccessDeniedException('Vous devez être connecté pour voir votre profil.');
+        }
+
+
+        return $this->redirectToRoute('app_member_show', [
+            'id' => $user->getId(),
+        ]);
+    }
 }

@@ -18,18 +18,34 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/vitrine')]
 final class VitrineController extends AbstractController
 {
+    
     #[Route(name: 'app_vitrine_index', methods: ['GET'])]
     public function index(VitrineRepository $vitrineRepository): Response
     {
-        $vitrinesPubliques = $vitrineRepository->findBy(
-            ['publiee' => true],
-            ['id' => 'ASC']
-        );
+        $user = $this->getUser();
+
+        if ($user instanceof Member && in_array('ROLE_ADMIN', $user->getRoles(), true)) {
+            $vitrines = $vitrineRepository->findAll();
+        } else {
+            $publicVitrines = $vitrineRepository->findBy([
+                'publiee' => true,
+            ]);
+
+            $privateVitrines = [];
+            if ($user instanceof Member) {
+                $privateVitrines = $vitrineRepository->findBy([
+                    'publiee'  => false,
+                    'createur' => $user,
+                ]);
+            }
+            $vitrines = array_merge($publicVitrines, $privateVitrines);
+        }
 
         return $this->render('vitrine/index.html.twig', [
-            'vitrines' => $vitrinesPubliques,
+            'vitrines' => $vitrines,
         ]);
     }
+
 
 
     #[Route('/new/{id}', name: 'app_vitrine_new', methods: ['GET', 'POST'])]

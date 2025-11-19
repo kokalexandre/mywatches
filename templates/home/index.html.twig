@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}MyWatches – Accueil{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+
+      <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body">
+          <h1 class="h3 mb-3">Bienvenue sur MyWatches</h1>
+
+          <p class="text-muted">
+            MyWatches est une application pédagogique pour gérer une collection de montres :
+            chaque membre dispose d’un coffre (inventaire privé),
+            peut créer des vitrines (galeries publiques ou privées),
+            et associer des photos à ses montres.
+          </p>
+
+          <ul class="mb-4">
+            <li>Consulter et gérer votre coffre de montres.</li>
+            <li>Créer des vitrines publiques ou privées.</li>
+            <li>Afficher vos montres avec leurs photos.</li>
+          </ul>
+
+          <div class="d-flex flex-wrap gap-2">
+            {% if app.user %}
+              {# Utilisateur connecté : accès direct à son espace #}
+              <a class="btn btn-primary"
+                 href="{{ path('app_member_show', { id: app.user.id }) }}">
+                Accéder à mon espace
+              </a>
+
+              <a class="btn btn-outline-secondary"
+                 href="{{ path('app_logout') }}">
+                Se déconnecter
+              </a>
+            {% else %}
+              {# Pas connecté : mettre en avant le login #}
+              <a class="btn btn-primary"
+                 href="{{ path('app_login') }}">
+                Se connecter
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

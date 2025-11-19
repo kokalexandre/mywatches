@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Montre;
+use App\Entity\Member;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -40,4 +41,19 @@ class MontreRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    /**
+    * @return Montre[] Retourne les montres du membre donné
+    */
+    public function findMemberMontres(Member $member): array
+    {
+        return $this->createQueryBuilder('m')
+            ->leftJoin('m.coffre', 'c')
+            ->leftJoin('c.member', 'mb')
+            ->andWhere('mb = :member')
+            ->setParameter('member', $member)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

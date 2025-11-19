@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Member;
 use App\Repository\CoffreRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -10,17 +11,33 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CoffreController extends AbstractController
 {
+    #[Route('/', name: 'home', methods: ['GET'])]
+    public function home(): Response
+    {
+        return $this->render('home/index.html.twig');
+    }
 
-    #[Route('/', name: 'coffre_list', methods: ['GET'])]
+    #[Route('/coffres', name: 'coffre_list', methods: ['GET'])]
     public function list(CoffreRepository $coffreRepository): Response
     {
-        $coffres = $coffreRepository->findAll();
+        if ($this->isGranted('ROLE_ADMIN')) {
+            $coffres = $coffreRepository->findAll();
+        } else {
+            $user = $this->getUser();
+            $coffres = [];
+
+            if ($user instanceof Member) {
+                $coffre = $user->getCoffre();
+                if ($coffre) {
+                    $coffres = [$coffre];
+                }
+            }
+        }
 
         return $this->render('coffre/list.html.twig', [
             'coffres' => $coffres,
         ]);
     }
-
 
     /**
      * Afficher la fiche d'un coffre (inventaire)

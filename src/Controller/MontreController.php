@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Montre;
+use App\Entity\Member;
 use App\Form\MontreType;
 use App\Entity\Coffre;
 use App\Repository\MontreRepository;
@@ -17,13 +18,26 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 #[Route('/montre')]
 final class MontreController extends AbstractController
 {
-    #[Route(name: 'app_montre_index', methods: ['GET'])]
+    #[Route('/', name: 'app_montre_index', methods: ['GET'])]
     public function index(MontreRepository $montreRepository): Response
     {
+        if ($this->isGranted('ROLE_ADMIN')) {
+            $montres = $montreRepository->findAll();
+        } else {
+            $user = $this->getUser();
+
+            if ($user instanceof Member) {
+                $montres = $montreRepository->findMemberMontres($user);
+            } else {
+                $montres = [];
+            }
+        }
+
         return $this->render('montre/index.html.twig', [
-            'montres' => $montreRepository->findAll(),
+            'montres' => $montres,
         ]);
     }
+
 
     #[Route('/new/{id}', name: 'app_montre_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, Coffre $coffre): Response
