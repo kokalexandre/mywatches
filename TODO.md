@@ -1,26 +1,9 @@
 
 -  **(Optionnel)** Contextualiser la création d’une Vitrine selon le membre *(OPTIONNEL)*  
 -  **(Optionnel)** Contextualiser l’ajout d’un Objet à une Vitrine *(OPTIONNEL)*
-
----
-
--  **CRUD Montre** *(OBLIGATOIRE — conseille `make:crud`, TP7)*
 -  **Messages flash pour les CRUD** *(OPTIONNEL)*
--  **Contextualiser la création d’une Montre selon le Coffre** *(OBLIGATOIRE)*
-
----
-
--  **Authentification (login/logout)** *(OBLIGATOIRE — TP8)*
 -  **Protéger l’accès aux données (proprio uniquement)** *(OPTIONNEL — TP8)*
 -  **Charger les données selon l’utilisateur connecté** *(OPTIONNEL)*
-
----
-
--  **Mise en ligne d’images pour les Montres** *(OBLIGATOIRE — TP8)*
-
----
-
--  **Liste des seuls coffres d’un membre** *(OBLIGATOIRE)*
 -  **Contextualiser la création d’une Vitrine par le membre** *(OPTIONNEL)*
 
 ---
