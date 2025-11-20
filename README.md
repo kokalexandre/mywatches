@@ -48,11 +48,11 @@ Sauf mention contraire, ils ont le **même mot de passe** : `123456`.
 
 | Rôle fonctionnel (projet)                 | Email                 | Mot de passe | Remarques synthétiques                                     |
 |-------------------------------------------|-----------------------|-------------|------------------------------------------------------------|
-| Membre 1  | `olivier@localhost`   | `123456`    | Coffre orienté « quotidien & sport » plongeuses & GMT.   |
-| Membre 2  | `slash@localhost`     | `123456`    | Coffre orienté montres habillées & classiques.            |
-| Membre 3  | `vintage@localhost`   | `123456`    | Montres vintage (plongeuses 60s, chronos…), plusieurs vitrines. |
-| Membre 4  | `indep@localhost`     | `123456`    | Sélection de marques indépendantes / micro-marques.       |
-| Membre 5  | `tooluser@localhost`  | `123456`    | Coffre orienté G-Shock, Casio digitales outdoor.         |
+| Membre 1  | `test@localhost`   | `123456`    | Coffre orienté « quotidien & sport » plongeuses & GMT.   |
+| Membre 2  | `nicolas@localhost`     | `123456`    | Coffre orienté montres habillées & classiques.            |
+| Membre 3  | `alexandre@localhost`   | `123456`    | Montres vintage (plongeuses 60s, chronos…), plusieurs vitrines. |
+| Membre 4  | `quentin@localhost`     | `123456`    | Sélection de marques indépendantes / micro-marques.       |
+| Membre 5  | `catherine@localhost`  | `123456`    | Coffre orienté G-Shock, Casio digitales outdoor.         |
 
 > **Rôles techniques** : dans la configuration actuelle, ces comptes sont créés avec le rôle `ROLE_USER`.  
 > Un compte admin (`ROLE_ADMIN`) peut être ajouté ultérieurement si nécessaire (par mise à jour en base ou via un script dédié).
